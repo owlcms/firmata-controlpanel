@@ -282,7 +282,28 @@ jobs:
         mkdir artifacts
         mv dist\firmata-Panel-installer_windows.exe artifacts\Windows_Control_Panel_Installer.exe
         cp dist\firmata.exe artifacts\firmata_controlpanel.exe
-        
+
+    - name: Install MSIX Packaging Tools
+      if: ${{ env.BUILD_WINDOWS == 'true' }}
+      run: |
+        choco install msix -y
+
+    - name: Create MSIX Package
+      if: ${{ env.BUILD_WINDOWS == 'true' }}
+      run: |
+        mkdir dist\msix
+        cp dist\firmata.exe dist\msix\
+        cp -r dist\Assets dist\msix\
+        # Update version in manifest
+        $manifestContent = Get-Content dist\AppxManifest.xml -Raw
+        $manifestContent = $manifestContent -replace '_TAG_',$env:TAG.TrimStart('v')
+        $manifestContent | Set-Content dist\msix\AppxManifest.xml -Force
+        MakeAppx pack /d dist\msix /p artifacts\firmata-Panel_windows_${{ env.TAG }}.msix /f AppxManifest.xml
+        # Self-sign the package for testing
+        New-SelfSignedCertificate -Type Custom -Subject "CN=OWLCMSDev, O=OWLCMS, C=CA" -KeyUsage DigitalSignature -FriendlyName "OWLCMS Development Certificate" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+        $cert = (Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.FriendlyName -eq "OWLCMS Development Certificate"})
+        SignTool sign /fd SHA256 /a /f $cert artifacts\firmata-Panel_windows_${{ env.TAG }}.msix
+
     - name: Save package_windows_artifacts
       if: ${{ env.BUILD_WINDOWS == 'true' }}
       uses: actions/upload-artifact@v4
@@ -396,4 +417,11 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release upload ${{ env.TAG }} dist/firmata_controlpanel.exe
+
+    - name: Release Windows MSIX package
+      if: ${{ env.BUILD_WINDOWS == 'true' }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${{ env.TAG }} dist/firmata-Panel_windows_${{ env.TAG }}.msix
 
