@@ -16,7 +16,7 @@ The control panel is installed once. It will automatically download the current 
 > When downloading the following files, some browsers may give you warnings about "rarely downloaded files".   You may have to select "Keep" one or more times to download the file.
 
 - For Windows, 
-  1. Download the Windows `firmata_controlpanel.exe` executable from the Assets section below
+  1. Download the Windows `Windows_Control_Panel_Installer.exe` executable from the Assets section below
   2. Drag the file from the Downloads area to your Desktop. 
   3. The first time you run the program, you may get warnings in a blue dialog box.  Select "More Info" and "Run Anyway"
 - For Mac
