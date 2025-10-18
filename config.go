@@ -42,6 +42,7 @@ func GetPort() string {
 }
 
 func InitEnv() {
+	log.Println("Initializing environment properties")
 	// Check for the presence of env.properties file in the owlcmsInstallDir
 	props := properties.NewProperties()
 	envFilePath := filepath.Join(owlcmsInstallDir, "env.properties")
