@@ -1,3 +1,10 @@
+# This software is now obsolete.
+The capabilities of this software are now included in [OWLCMS Control Panel](https://github.com/owlcms/owlcms-controlpanel?tab=readme-ov-file#control-panel-for-owlcms-and-associated-modules).
+This repository has been archived
+
+<br>
+<br>
+
 ## Portable Control Panel for owlcms-firmata Server
 
 [owlcms-firmata]([url](https://github.com/jflamy/owlcms-firmata)) it a software program to control refereeing/jury/timekeeper/announcer devices and interact with an owlcms server.
